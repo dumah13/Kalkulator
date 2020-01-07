@@ -4,70 +4,113 @@
 #include <math.h>
 #include <string.h>
 
-#define MAXSTRLEN 100
+//Maksymalna dlugosc tablicy znakow (stringa) bufora Inputow
+#define MAXSTRLEN 1000
 
+//Struktura liczby zespolonej na ktorej wykonywane sa obliczenia
 struct LiczbaZespolona {
 	double czesc_rzeczywista;
 	double czesc_urojona;
 }; typedef struct LiczbaZespolona Zesp;
 
+
+//Struktura Elementu stosu
 struct ElementStosu {
 	Zesp wartosc;
 	struct ElementStosu* Poprzedni;
 };  typedef struct ElementStosu Element;
 
+//Zmienna globalna pelniaca funkcje Stack Pointera - wskaznika stosu
 Element* szczyt_stosu = NULL;
 
+#pragma region NaglowkiFunkcji
+
+//Inicjalizacja stosu
 void init();
+
+//Sprawdza, czy stos jest pusty
+//Zwraca: 1 - pusty stos, 0 - niepusty stos
+int Puste();
+
+//Zdejmuje Element ze stosu
+//Zwraca: Zdjety Element badz 0 gdy stos jest pusty
 Zesp Pop();
+
+//Dodaje i zdejmuje dwie liczby zespolone z gory stosu i odklada wynik na stos
+//Zwraca: Wynik dodawania
 Zesp Dodaj();
+
+//Odejmuje i zdejmuje dwie liczby zespolone z gory stosu i odklada wynik na stos
+//Zwraca: Wynik odejmowania
 Zesp Odejmij();
+
+//Dzieli i zdejmuje dwie liczby zespolone z gory stosu i odklada wynik na stos
+//Zwraca: Wynik dzielenia lub 0 w przypadku dzielenia przez 0
 Zesp Podziel();
+
+//Mnozy i zdejmuje dwie liczby zespolone z gory stosu i odklada wynik na stos
+//Zwraca: Wynik mnozenia
 Zesp Pomnoz();
-int ZdekodujWyrazenie(char* bufor);
-void WyswietlStos();
+
+//Konwertuje wpisane przez uzytkownika wyrazenie w serie polecen w celu wykonania dzialan
+//Zwraca: Kod polecenia (0 - wykonano dzialania, -1 - zakoncz dzialanie)
+int Zdekoduj_Wyrazenie(char* bufor);
+
+//Wyswietla w konsoli Stos
+void Wyswietl_Stos();
+
+//Usuwa wszystkie elementy stosu (poza podstawa)
 void Wyczysc_Stos();
+
+//Odklada liczbe zespolona na stos
 void Push(Zesp liczba);
-char* WczytajKonsola(char komunikat[]);
+
+//Wyswietla zapytanie o Input od uzytkownika z podanym komunikatem
+//Zwraca: adres bufora z wpisanym przez uzytkownika Inputem
+char* Wczytaj_Konsola(char komunikat[]);
+
+//Usuwa i zwalnia z pamieci najwyzej polozony element stosu
 void Zwolnij_Pamiec();
 
+#pragma endregion Deklaracja naglowkow funkcji oraz ich opisy.
+
+
 int main(int argc, char* argv[]) {
-	char* bufor;
+	char* bufor = malloc(1);
 	int krok_programu = 0;
-	Zesp i = { 5, 1 };
-	Zesp j = { 6, 3 };
 	Zesp liczba;
 
 	init();
 
-	for (;;)
+	for (;;) //Nieskonczona petla dzialania programu
 	{
 		switch (krok_programu) {
-		case 0:
+		case 0://Wyswietlanie naglowka programu
 			printf("----\tKalkulator Liczb Zespolonych\t----\n");
 			krok_programu = 1;
 			break;
-		case 1:
-			krok_programu = 2;
-			break;
-		case 2:
+		case 1://Petla wpisywania wyrazen
 			printf("Stos:\n");
 
-			WyswietlStos();
+			Wyswietl_Stos();
+			Puste() ? printf("Pusty stos.\n") : printf("\n");
+			free(bufor);
 
-			if ((bufor = WczytajKonsola("\nPodaj wyrazenie\ndozwolone dzialania: \n/\n*\n+\n-\n= aby zakonczyc i wyczyscic stos\n\n")) == -1) { krok_programu = 100; continue; };
-			if (ZdekodujWyrazenie(bufor) == -1) { krok_programu = 3; continue; };
+			if ((bufor = Wczytaj_Konsola("Podaj wyrazenie\ndozwolone dzialania: \n/\n*\n+\n-\n= aby zakonczyc i wyczyscic stos\n\n")) == -1) { krok_programu = 100; continue; };
+			if (Zdekoduj_Wyrazenie(bufor) == -1) { krok_programu = 2; continue; };
 			liczba = Pop();
 			Push(liczba);
+			system("cls");
 			printf("Wynik wyrazenia:\n%.2f%+.2fi\n",liczba.czesc_rzeczywista, liczba.czesc_urojona);
 			break;
-		case 3:
+		case 2://Zakoncz wpisywanie obecnego dzialania i wyczysc stos
 			liczba = Pop();
 			Wyczysc_Stos();
+			system("cls");
 			printf("Wynik koncowy to:\n%.2f%+.2fi\n", liczba.czesc_rzeczywista, liczba.czesc_urojona);
 			krok_programu = 0;
 			break;
-		case 100:
+		case 100://Zamkniecie programu
 			Wyczysc_Stos();
 			Zwolnij_Pamiec();
 			return 0;
@@ -75,7 +118,7 @@ int main(int argc, char* argv[]) {
 	}
 }
 
-void WyswietlStos() {
+void Wyswietl_Stos() {
 	Element* iterator_stosu;
 
 	iterator_stosu = szczyt_stosu;
@@ -100,7 +143,7 @@ void Push(Zesp liczba) {
 Zesp Pop() {
 	Zesp liczba = szczyt_stosu->wartosc;
 
-	if (szczyt_stosu->Poprzedni == NULL) {
+	if (Puste()) {
 		printf("Blad 1 - osiagnieto koniec stosu.\n");
 		return liczba;
 	}
@@ -117,14 +160,14 @@ void Zwolnij_Pamiec() {
 }
 
 void Wyczysc_Stos() {
-	while (szczyt_stosu->Poprzedni != NULL) {
+	while (!Puste()) {
 		Zwolnij_Pamiec();
 	}
 }
 
-char* WczytajKonsola(char komunikat[]) {
+char* Wczytaj_Konsola(char komunikat[]) {
 	char c;
-	char* bufor = calloc(MAXSTRLEN, sizeof(&bufor));
+	char* bufor = calloc(MAXSTRLEN, sizeof(*bufor));
 
 	printf("\n %s \nWcisnij ',' aby wyjsc z programu\n\n", komunikat);
 	gets(bufor);
@@ -204,14 +247,18 @@ Zesp Podziel() {
 	return wynik;
 }
 
-int ZdekodujWyrazenie(char* bufor) {
-	int rzecz;
+int Puste() {
+	return szczyt_stosu->Poprzedni == NULL ? 1 : 0;
+}
+
+int Zdekoduj_Wyrazenie(char* bufor) {
+	double rzecz;
 	int uroj;
 	int status = 1;
 	int rzeczywista_zapelniona = 0;
 	char oper;
 	const char s[2] = " ";
-	char* token = calloc(strlen(bufor, sizeof(*token)));
+	char* token;
 	Zesp liczba_zesp;
 	Zesp wynik;
 
@@ -219,7 +266,7 @@ int ZdekodujWyrazenie(char* bufor) {
 
 	while (token)
 	{
-		if ((status = sscanf(token, "%d", &rzecz)) == 1) {//wczytano liczbe zespolona
+		if ((status = sscanf(token, "%lf", &rzecz)) == 1) {//wczytano liczbe zespolona
 			if (!rzeczywista_zapelniona)
 			{
 				rzeczywista_zapelniona = 1;
@@ -246,7 +293,7 @@ int ZdekodujWyrazenie(char* bufor) {
 				Dodaj();
 				break;
 			case '-':
-				Odejmij;
+				Odejmij();
 				break;
 			case '*':
 				Pomnoz();
@@ -255,6 +302,7 @@ int ZdekodujWyrazenie(char* bufor) {
 				Podziel();
 				break;
 			case '=':
+				//free(token);
 				return -1;
 			case 'i':
 				token[0] = ' ';
@@ -273,5 +321,6 @@ int ZdekodujWyrazenie(char* bufor) {
 		liczba_zesp.czesc_urojona = 0;
 		Push(liczba_zesp);
 	}
-
+	//free(token);
+	return 0;
 }
