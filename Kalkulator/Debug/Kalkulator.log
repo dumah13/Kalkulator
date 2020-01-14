@@ -1,16 +1,16 @@
 ﻿  Źródło.c
 C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(79,22): warning C4013:  niezdefiniowany "malloc"; przy założeniu, że extern zwraca int
 C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(97,8): warning C4013:  niezdefiniowany "free"; przy założeniu, że extern zwraca int
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(99,131): warning C4047:  "==": "char *" różni się w poziomach operatorów pośrednich od "int"
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(103,10): warning C4013:  niezdefiniowany "system"; przy założeniu, że extern zwraca int
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(100,136): warning C4047:  "==": "char *" różni się w poziomach operatorów pośrednich od "int"
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(101,10): warning C4013:  niezdefiniowany "system"; przy założeniu, że extern zwraca int
 C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(79,1): warning C4047:  "inicjowanie": "char *" różni się w poziomach operatorów pośrednich od "int"
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(137,1): warning C4047:  "inicjowanie": "Element *" różni się w poziomach operatorów pośrednich od "int"
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(170,22): warning C4013:  niezdefiniowany "calloc"; przy założeniu, że extern zwraca int
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(173,6): warning C4013:  niezdefiniowany "gets"; przy założeniu, że extern zwraca int
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(179,12): warning C4047:  "return": "char *" różni się w poziomach operatorów pośrednich od "int"
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(170,1): warning C4047:  "inicjowanie": "char *" różni się w poziomach operatorów pośrednich od "int"
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(169,7): warning C4101:  "c": lokalna zmienna, do której nie istnieje odwołanie
-C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(230,65): warning C4244:  "=": konwersja z "double" do "int", możliwa utrata danych
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(140,1): warning C4047:  "inicjowanie": "Element *" różni się w poziomach operatorów pośrednich od "int"
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(173,22): warning C4013:  niezdefiniowany "calloc"; przy założeniu, że extern zwraca int
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(176,6): warning C4013:  niezdefiniowany "gets"; przy założeniu, że extern zwraca int
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(182,12): warning C4047:  "return": "char *" różni się w poziomach operatorów pośrednich od "int"
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(173,1): warning C4047:  "inicjowanie": "char *" różni się w poziomach operatorów pośrednich od "int"
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(172,7): warning C4101:  "c": lokalna zmienna, do której nie istnieje odwołanie
+C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(233,65): warning C4244:  "=": konwersja z "double" do "int", możliwa utrata danych
 C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(256,6): warning C4101:  "uroj": lokalna zmienna, do której nie istnieje odwołanie
 C:\Users\Student247291\source\repos\Kalkulator\Kalkulator\Źródło.c(263,7): warning C4101:  "wynik": lokalna zmienna, do której nie istnieje odwołanie
   Kalkulator.vcxproj -> C:\Users\Student247291\source\repos\Kalkulator\Debug\Kalkulator.exe

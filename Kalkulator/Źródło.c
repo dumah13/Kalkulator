@@ -96,12 +96,15 @@ int main(int argc, char* argv[]) {
 			Puste() ? printf("Pusty stos.\n") : printf("\n");
 			free(bufor);
 
-			if ((bufor = Wczytaj_Konsola("Podaj wyrazenie\ndozwolone dzialania: \n/\n*\n+\n-\n= aby zakonczyc i wyczyscic stos\n\n")) == -1) { krok_programu = 100; continue; };
-			if (Zdekoduj_Wyrazenie(bufor) == -1) { krok_programu = 2; continue; };
-			liczba = Pop();
-			Push(liczba);
+			if ((bufor = Wczytaj_Konsola("\rPodaj wyrazenie w postaci:\n '3 4' == 3 + 4i; '3' == 3 + 0i;\n '3 i6' = 3 + 6i; 'i7' == 0 + 7i;\n '/' == Podziel; '3 0 6 0 *' == 3 * 6; etc.\
+				\r\ndozwolone dzialania: \n'/' - Podziel\n'*' - Pomnoz\n'+' - Dodaj\n'-' - Odejmij\n'=' aby zakonczyc i wyczyscic stos\n\n")) == -1) { krok_programu = 100; continue; };
 			system("cls");
-			printf("Wynik wyrazenia:\n%.2f%+.2fi\n",liczba.czesc_rzeczywista, liczba.czesc_urojona);
+			if (Zdekoduj_Wyrazenie(bufor) == -1) { krok_programu = 2; continue; };
+			if (!Puste()) {
+				liczba = Pop();
+				Push(liczba);
+				printf("Wynik wyrazenia:\n%.2f%+.2fi\n\n", liczba.czesc_rzeczywista, liczba.czesc_urojona);
+			}
 			break;
 		case 2://Zakoncz wpisywanie obecnego dzialania i wyczysc stos
 			liczba = Pop();
@@ -219,7 +222,7 @@ Zesp Podziel() {
 	Zesp y = Pop();
 	Zesp x = Pop();
 	Zesp temp;
-	Zesp wynik;
+	Zesp wynik = {0,0};
 	int temp2;
 
 	y.czesc_urojona *= -1;
@@ -230,12 +233,9 @@ Zesp Podziel() {
 	temp2 = (pow(y.czesc_rzeczywista, 2) + pow(y.czesc_urojona, 2));
 
 	if (!temp2) {
-		printf("\nNiedozwolone dzielenie przez 0!\n");
+		printf("\nNiedozwolone dzielenie przez 0!\nCzyszcze stos\n");
 		y.czesc_urojona *= -1;
-		Push(x);
-		Push(y);
-		wynik.czesc_rzeczywista = 0;
-		wynik.czesc_urojona = 0;
+		Wyczysc_Stos();
 		return wynik;
 	}
 
@@ -281,7 +281,7 @@ int Zdekoduj_Wyrazenie(char* bufor) {
 			}
 		}
 		else if (status = sscanf(token, "%c", &oper)) {
-			if (rzeczywista_zapelniona)
+			if (rzeczywista_zapelniona && token[0] != 'i')
 			{
 				rzeczywista_zapelniona = 0;
 				liczba_zesp.czesc_urojona = 0;
@@ -306,6 +306,7 @@ int Zdekoduj_Wyrazenie(char* bufor) {
 				return -1;
 			case 'i':
 				token[0] = ' ';
+				if (!rzeczywista_zapelniona) { rzeczywista_zapelniona = 1; liczba_zesp.czesc_rzeczywista = 0; }
 				continue;
 			default:
 				printf("\nNierozpoznany operator %c.\n", oper);
